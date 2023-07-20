@@ -20,9 +20,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="customer" items="${customers}">
+                            <c:forEach var="customer" items="${customers}" varStatus="status">
                                 <tr>
-                                    <td>${customer.idCliente}</td>
+                                    <td>${status.count}</td>
                                     <td>${customer.nombre} ${customer.apellido}</td>
                                     <td><fmt:formatNumber value="${customer.saldo}" type="currency"> </fmt:formatNumber></td>
                                         <td>
