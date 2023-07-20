@@ -26,7 +26,7 @@
                                     <td>${customer.nombre} ${customer.apellido}</td>
                                     <td><fmt:formatNumber value="${customer.saldo}" type="currency"> </fmt:formatNumber></td>
                                         <td>
-                                            <a href="${pageContext.request.contextPath}/ServletController?accion=edit&idCustomer=${customer.idCliente}"
+                                            <a href="${pageContext.request.contextPath}/ServletController?action=edit&idCustomer=${customer.idCliente}"
                                            class="btn btn-secondary">
                                             <i class="fas fa-angle-double-right"></i> Edit
                                         </a>
@@ -55,8 +55,8 @@
                              </h4>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </section>
+                                <jsp:include  page="/WEB-INF/pages/customer/addCustomer.jsp" />
