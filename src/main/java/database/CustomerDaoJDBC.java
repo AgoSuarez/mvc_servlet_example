@@ -14,7 +14,7 @@ public class CustomerDaoJDBC implements CustomerDao {
     private static final String SQL_SELECT_BY_ID = "SELECT id_cliente, nombre, apellido, email, telefono, saldo FROM cliente"
             + " WHERE id_cliente=?";
     private static final String SQL_INSERT = "INSERT INTO cliente(nombre, apellido,email,telefono,saldo) VALUES (?,?,?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE cliente SET (nombre=?, apellido=?,email=?,telefono=?, saldo=?  "
+    private static final String SQL_UPDATE = "UPDATE cliente SET nombre=?, apellido=?,email=?,telefono=?, saldo=?  "
             + "WHERE id_cliente=?";
     private static final String SQL_DELETE = "DELETE FROM cliente WHERE id_cliente=?";
 
@@ -59,12 +59,14 @@ public class CustomerDaoJDBC implements CustomerDao {
             stmt = conn.prepareStatement(SQL_SELECT_BY_ID);
             stmt.setInt(1, customer.getIdCliente());
             rs=stmt.executeQuery();
-            rs.absolute(1); //First element
+          //  rs.absolute(1); //First element
+            while (rs.next()){
             customer.setNombre(rs.getString("nombre"));
             customer.setApellido(rs.getString("apellido"));
             customer.setEmail(rs.getString("email"));
             customer.setTelefono(rs.getString("telefono"));
             customer.setSaldo(rs.getDouble("saldo"));            
+            }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
         } finally {

@@ -16,7 +16,19 @@ public class ServletController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        this.requestListCustomer(request, response);
+        String action = request.getParameter("action");
+        if (action != null) {
+            switch (action) {
+                case "edit":
+                    editCustomer(request, response);
+                    break;
+                case "delete":
+                    deleteCustomer(request, response);
+                    break;
+            }
+        } else {
+            this.requestListCustomer(request, response);
+        }
     }
 
     private void requestListCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,7 +59,8 @@ public class ServletController extends HttpServlet {
                 case "create":
                     createCustomer(request, response);
                     break;
-                case "edit":
+                case "update":
+                    updateCustomer(request, response);
                     break;
             }
         }
@@ -59,10 +72,37 @@ public class ServletController extends HttpServlet {
         String surname = request.getParameter("surname");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
-        Double balance =Double.valueOf(request.getParameter("balance"));
+        Double balance = Double.valueOf(request.getParameter("balance"));
         Customer customer = new Customer(name, surname, email, phone, balance);
         int result = new CustomerDaoJDBC().Insert(customer);
-        System.out.println("Customers add(" + result +") "+ customer );
+        System.out.println("Customers add(" + result + ") " + customer);
+    }
+
+    private void editCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("idCustomer"));
+        Customer customer = new CustomerDaoJDBC().findById(new Customer(id));
+        request.setAttribute("customer", customer);
+        String jspEdit = "/WEB-INF/pages/customer/editCustomer.jsp";
+        request.getRequestDispatcher(jspEdit).forward(request, response);
+    }
+
+    private void updateCustomer(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("idCustomer"));
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        Double balance = Double.valueOf(request.getParameter("balance"));
+        Customer customer = new Customer(id, name, surname, email, phone, balance);
+        int result = new CustomerDaoJDBC().Update(customer);
+
+    }
+
+    private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Borrando el cliente: " + request.getParameter("idCustomer"));
+        int id = Integer.parseInt(request.getParameter("idCustomer"));
+        int delete= new CustomerDaoJDBC().Delete(new Customer(id));
+        this.requestListCustomer(request, response);
     }
 
 }
